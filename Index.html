@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Paz en Crisis · Análisis con Métodos Numéricos</title>
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <span class="brand-flag">🇧🇴</span>
+      <div class="brand-text">
+        <span class="brand-title">LA PAZ EN CRISIS</span>
+        <span class="brand-sub">Análisis con Métodos Numéricos · UMSA 2026</span>
+      </div>
+    </div>
+    <nav class="main-nav" id="mainNav">
+      <a href="#escenario-a" class="nav-link">A · Transporte</a>
+      <a href="#escenario-b" class="nav-link">B · Combustible</a>
+      <a href="#escenario-c" class="nav-link">C · Precios</a>
+      <a href="#escenario-d" class="nav-link">D · Poder Adquisitivo</a>
+      <a href="#escenario-e" class="nav-link">E · Umbrales</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Menú">☰</button>
+  </div>
+</header>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Proyecto Final · Métodos Numéricos · Victor Alberto Machaca Calle</div>
+    <h1 class="hero-title">La Paz<br/><em>en Cifras</em></h1>
+    <p class="hero-desc">
+      Simulación matemática del impacto de bloqueos, escasez de combustibles
+      y crisis de abastecimiento sobre la economía familiar paceña.
+      Cinco escenarios. Doce métodos numéricos.
+    </p>
+    <div class="hero-pills">
+      <span class="pill">Jacobi · Gauss-Seidel · SOR · LU · Grad. Conjugado</span>
+      <span class="pill">Euler · Heun · RK4</span>
+      <span class="pill">Lagrange · Newton · Splines</span>
+      <span class="pill">Trapecio · Simpson</span>
+      <span class="pill">Bisección · Newton-Raphson · Secante</span>
+    </div>
+    <a href="#escenario-a" class="hero-cta">Iniciar Análisis ↓</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-n">5</span><span class="stat-l">Escenarios</span></div>
+    <div class="stat"><span class="stat-n">12+</span><span class="stat-l">Métodos</span></div>
+    <div class="stat"><span class="stat-n">100%</span><span class="stat-l">Interactivo</span></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ESCENARIO A ═══════════════════ -->
+<section class="scenario" id="escenario-a">
+  <div class="scenario-header">
+    <div class="scenario-letter">A</div>
+    <div class="scenario-title-block">
+      <h2>Optimización del Abastecimiento y Red de Transporte</h2>
+      <p>Jacobi · Gauss-Seidel · SOR · Descomposición LU · Gradiente Conjugado</p>
+    </div>
+  </div>
+
+  <!-- Contexto académico -->
+  <div class="academic-block">
+    <h3>📚 Contexto y Fundamento Matemático</h3>
+    <p>
+      Los bloqueos en La Paz interrumpen rutas de abastecimiento, generando un
+      sistema de distribución desequilibrado. Modelamos la red como un
+      <strong>sistema lineal \(A\mathbf{x}=\mathbf{b}\)</strong>, donde cada
+      ecuación representa el balance de flujo en un nodo (zona urbana o planta distribuidora).
+    </p>
+    <div class="math-block">
+      $$A\mathbf{x} = \mathbf{b}$$
+      $$\begin{pmatrix}a_{11}&a_{12}&a_{13}\\a_{21}&a_{22}&a_{23}\\a_{31}&a_{32}&a_{33}\end{pmatrix}
+        \begin{pmatrix}x_1\\x_2\\x_3\end{pmatrix}=
+        \begin{pmatrix}b_1\\b_2\\b_3\end{pmatrix}$$
+    </div>
+    <div class="var-grid">
+      <div class="var-item"><strong>$x_i$</strong> — Flujo enviado a la zona $i$ (toneladas/día)</div>
+      <div class="var-item"><strong>$a_{ij}$</strong> — Coeficiente de restricción de la ruta $i \to j$</div>
+      <div class="var-item"><strong>$b_i$</strong> — Demanda neta de la zona $i$</div>
+      <div class="var-item"><strong>$A$</strong> — Matriz de capacidades y restricciones</div>
+    </div>
+    <p><strong>Jacobi:</strong> $x_i^{(k+1)} = \frac{1}{a_{ii}}\left(b_i - \sum_{j\neq i}a_{ij}x_j^{(k)}\right)$ — Todas las variables se actualizan simultáneamente.</p>
+    <p><strong>Gauss-Seidel:</strong> Usa los valores más recientes en cada iteración, logrando convergencia más rápida.</p>
+    <p><strong>SOR:</strong> $x_i^{(k+1)} = \omega\cdot x_i^{GS} + (1-\omega)x_i^{(k)}$ — Parámetro de relajación $\omega \in (0,2)$ acelera la convergencia.</p>
+    <p><strong>LU:</strong> $A=LU$, resuelve $L\mathbf{y}=\mathbf{b}$ y $U\mathbf{x}=\mathbf{y}$ — Solución exacta por sustitución.</p>
+    <p><strong>Gradiente Conjugado:</strong> Método iterativo óptimo para matrices simétricas positivo-definidas, ideal cuando la matriz tiene la estructura de red de transporte.</p>
+  </div>
+
+  <!-- Formulario -->
+  <div class="form-card">
+    <h3>⚙️ Parámetros del Sistema</h3>
+    <div class="form-row">
+      <label>Tamaño del sistema (n × n, máx 5):
+        <input type="number" id="a-size" value="3" min="2" max="5" />
+      </label>
+      <label>Tolerancia:
+        <input type="number" id="a-tol" value="0.0001" step="0.0001" />
+      </label>
+      <label>Máx. iteraciones:
+        <input type="number" id="a-maxiter" value="100" />
+      </label>
+      <label>Factor SOR (ω):
+        <input type="number" id="a-omega" value="1.25" step="0.05" min="0.1" max="1.99" />
+      </label>
+    </div>
+    <div class="matrix-builder" id="a-matrix-builder">
+      <p class="hint">👇 Haz clic en "Generar Matriz" para construir la interfaz de entrada</p>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-secondary" onclick="buildMatrixA()">Generar Matriz</button>
+      <button class="btn btn-primary" onclick="runScenarioA()">▶ Resolver Sistema</button>
+      <button class="btn btn-ghost" onclick="loadExampleA()">Cargar Ejemplo La Paz</button>
+    </div>
+  </div>
+
+  <!-- Resultados -->
+  <div class="results-area" id="a-results" style="display:none">
+    <div class="results-tabs">
+      <button class="tab-btn active" onclick="showTab('a','lu')">LU</button>
+      <button class="tab-btn" onclick="showTab('a','jacobi')">Jacobi</button>
+      <button class="tab-btn" onclick="showTab('a','gs')">Gauss-Seidel</button>
+      <button class="tab-btn" onclick="showTab('a','sor')">SOR</button>
+      <button class="tab-btn" onclick="showTab('a','cg')">Grad. Conjugado</button>
+    </div>
+    <div id="a-tab-lu" class="tab-content active">
+      <div id="a-lu-result"></div>
+    </div>
+    <div id="a-tab-jacobi" class="tab-content">
+      <div id="a-jacobi-result"></div>
+    </div>
+    <div id="a-tab-gs" class="tab-content">
+      <div id="a-gs-result"></div>
+    </div>
+    <div id="a-tab-sor" class="tab-content">
+      <div id="a-sor-result"></div>
+    </div>
+    <div id="a-tab-cg" class="tab-content">
+      <div id="a-cg-result"></div>
+    </div>
+    <div class="chart-wrap"><canvas id="chartA"></canvas></div>
+    <div class="interpretation-box" id="a-interpretation"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ESCENARIO B ═══════════════════ -->
+<section class="scenario" id="escenario-b">
+  <div class="scenario-header">
+    <div class="scenario-letter">B</div>
+    <div class="scenario-title-block">
+      <h2>Vaciado de Reservas de Combustible</h2>
+      <p>Euler · Heun · Runge-Kutta 4</p>
+    </div>
+  </div>
+
+  <div class="academic-block">
+    <h3>📚 Contexto y Fundamento Matemático</h3>
+    <p>
+      La escasez de combustible en La Paz obedece a una ecuación diferencial de
+      balance de reservas. Modelamos la evolución de la reserva $R(t)$ como:
+    </p>
+    <div class="math-block">
+      $$\frac{dR}{dt} = E(t) - C(t)$$
+    </div>
+    <div class="var-grid">
+      <div class="var-item"><strong>$R(t)$</strong> — Reserva disponible en el tiempo $t$ (litros)</div>
+      <div class="var-item"><strong>$E(t)$</strong> — Entrada diaria de combustible (litros/día)</div>
+      <div class="var-item"><strong>$C(t)$</strong> — Consumo diario (litros/día)</div>
+      <div class="var-item"><strong>$R_0$</strong> — Reserva inicial</div>
+      <div class="var-item"><strong>$R_c$</strong> — Nivel crítico de alarma</div>
+    </div>
+    <div class="math-block">
+      $$\textbf{Euler:}\quad R_{n+1} = R_n + h\cdot f(t_n, R_n)$$
+      $$\textbf{Heun:}\quad R_{n+1} = R_n + \frac{h}{2}\left[f(t_n,R_n)+f(t_{n+1},\tilde{R}_{n+1})\right]$$
+      $$\textbf{RK4:}\quad R_{n+1} = R_n + \frac{h}{6}(k_1+2k_2+2k_3+k_4)$$
+    </div>
+    <p>donde $h$ es el paso temporal (1 día) y $f(t,R) = E - C$.</p>
+    <p><strong>Interpretación económica:</strong> Cada litro de combustible faltante eleva el costo de transporte de bienes y reduce la oferta en mercados, generando inflación importada interna.</p>
+  </div>
+
+  <div class="form-card">
+    <h3>⚙️ Parámetros de Combustible</h3>
+    <div class="form-row">
+      <label>Reserva inicial (litros):
+        <input type="number" id="b-r0" value="50000" />
+      </label>
+      <label>Entrada diaria (litros/día):
+        <input type="number" id="b-entrada" value="3000" />
+      </label>
+      <label>Consumo diario (litros/día):
+        <input type="number" id="b-consumo" value="5000" />
+      </label>
+      <label>Días de simulación:
+        <input type="number" id="b-dias" value="30" min="5" max="365" />
+      </label>
+      <label>Nivel crítico (litros):
+        <input type="number" id="b-critico" value="10000" />
+      </label>
+      <label>Paso h (días):
+        <input type="number" id="b-h" value="1" step="0.1" min="0.1" />
+      </label>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="runScenarioB()">▶ Simular</button>
+      <button class="btn btn-ghost" onclick="loadExampleB()">Cargar Ejemplo La Paz</button>
+    </div>
+  </div>
+
+  <div class="results-area" id="b-results" style="display:none">
+    <div class="chart-wrap"><canvas id="chartB"></canvas></div>
+    <div class="table-wrap" id="b-table"></div>
+    <div class="interpretation-box" id="b-interpretation"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ESCENARIO C ═══════════════════ -->
+<section class="scenario" id="escenario-c">
+  <div class="scenario-header">
+    <div class="scenario-letter">C</div>
+    <div class="scenario-title-block">
+      <h2>Curva de Precios de Alimentos</h2>
+      <p>Lagrange · Newton (diferencias divididas) · Splines Cúbicos</p>
+    </div>
+  </div>
+
+  <div class="academic-block">
+    <h3>📚 Contexto y Fundamento Matemático</h3>
+    <p>
+      Los precios de canasta básica en La Paz muestran escalones bruscos durante
+      bloqueos. La interpolación permite estimar precios en días sin registro y
+      analizar la tendencia futura.
+    </p>
+    <div class="math-block">
+      $$P_L(x) = \sum_{i=0}^{n} y_i \prod_{j\neq i}\frac{x-x_j}{x_i-x_j} \quad\text{(Lagrange)}$$
+      $$P_N(x) = f[x_0] + f[x_0,x_1](x-x_0) + f[x_0,x_1,x_2](x-x_0)(x-x_1)+\cdots \quad\text{(Newton)}$$
+    </div>
+    <p>Los <strong>Splines Cúbicos</strong> dividen el intervalo en tramos, ajustando un polinomio de grado 3 en cada uno con continuidad de primera y segunda derivada:</p>
+    <div class="math-block">
+      $$S_i(x) = a_i + b_i(x-x_i)+c_i(x-x_i)^2+d_i(x-x_i)^3$$
+    </div>
+    <div class="var-grid">
+      <div class="var-item"><strong>$x_i$</strong> — Día del registro de precio</div>
+      <div class="var-item"><strong>$y_i$</strong> — Precio registrado en Bs.</div>
+      <div class="var-item"><strong>$P(x)$</strong> — Precio estimado en el día $x$</div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <h3>⚙️ Datos de Precios</h3>
+    <p class="hint">Ingresa pares (día, precio). Mínimo 3 puntos, máximo 10.</p>
+    <div id="c-points-container">
+      <div class="point-row">
+        <input type="number" placeholder="Día" class="c-day" value="0" />
+        <input type="number" placeholder="Precio Bs." class="c-price" value="8.5" step="0.01" />
+        <button class="btn-remove" onclick="removePoint(this)">✕</button>
+      </div>
+      <div class="point-row">
+        <input type="number" placeholder="Día" class="c-day" value="5" />
+        <input type="number" placeholder="Precio Bs." class="c-price" value="9.2" step="0.01" />
+        <button class="btn-remove" onclick="removePoint(this)">✕</button>
+      </div>
+      <div class="point-row">
+        <input type="number" placeholder="Día" class="c-day" value="10" />
+        <input type="number" placeholder="Precio Bs." class="c-price" value="11.0" step="0.01" />
+        <button class="btn-remove" onclick="removePoint(this)">✕</button>
+      </div>
+      <div class="point-row">
+        <input type="number" placeholder="Día" class="c-day" value="15" />
+        <input type="number" placeholder="Precio Bs." class="c-price" value="13.5" step="0.01" />
+        <button class="btn-remove" onclick="removePoint(this)">✕</button>
+      </div>
+      <div class="point-row">
+        <input type="number" placeholder="Día" class="c-day" value="20" />
+        <input type="number" placeholder="Precio Bs." class="c-price" value="12.0" step="0.01" />
+        <button class="btn-remove" onclick="removePoint(this)">✕</button>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Estimar precio en el día:
+        <input type="number" id="c-eval" value="12" />
+      </label>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="addPoint()">+ Agregar punto</button>
+      <button class="btn btn-primary" onclick="runScenarioC()">▶ Interpolar</button>
+      <button class="btn btn-ghost" onclick="loadExampleC()">Cargar Ejemplo La Paz</button>
+    </div>
+  </div>
+
+  <div class="results-area" id="c-results" style="display:none">
+    <div class="chart-wrap"><canvas id="chartC"></canvas></div>
+    <div class="table-wrap" id="c-table"></div>
+    <div class="interpretation-box" id="c-interpretation"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ESCENARIO D ═══════════════════ -->
+<section class="scenario" id="escenario-d">
+  <div class="scenario-header">
+    <div class="scenario-letter">D</div>
+    <div class="scenario-title-block">
+      <h2>Pérdida del Poder Adquisitivo</h2>
+      <p>Trapecio · Simpson 1/3 · Simpson 3/8</p>
+    </div>
+  </div>
+
+  <div class="academic-block">
+    <h3>📚 Contexto y Fundamento Matemático</h3>
+    <p>
+      El gasto acumulado de una familia paceña durante la crisis se calcula
+      integrando numéricamente el producto precio × consumo diario.
+      La pérdida de poder adquisitivo es la diferencia entre el gasto real
+      y el gasto hipotético sin inflación.
+    </p>
+    <div class="math-block">
+      $$G = \int_0^T P(t)\cdot Q(t)\,dt \approx \sum_{i}\Delta t \cdot P_i\cdot Q_i$$
+    </div>
+    <div class="math-block">
+      $$\textbf{Trapecio:}\quad \int_a^b f\,dx \approx \frac{h}{2}[f_0+2f_1+\cdots+2f_{n-1}+f_n]$$
+      $$\textbf{Simpson 1/3:}\quad \int_a^b f\,dx \approx \frac{h}{3}[f_0+4f_1+2f_2+\cdots+f_n]$$
+      $$\textbf{Simpson 3/8:}\quad \int_a^b f\,dx \approx \frac{3h}{8}[f_0+3f_1+3f_2+2f_3+\cdots+f_n]$$
+    </div>
+    <div class="var-grid">
+      <div class="var-item"><strong>$P(t)$</strong> — Precio del producto en el día $t$ (Bs./kg)</div>
+      <div class="var-item"><strong>$Q(t)$</strong> — Cantidad consumida en el día $t$ (kg/día)</div>
+      <div class="var-item"><strong>$G$</strong> — Gasto acumulado total (Bs.)</div>
+      <div class="var-item"><strong>$P_0$</strong> — Precio base sin inflación (Bs./kg)</div>
+    </div>
+    <p><strong>Pérdida de poder adquisitivo:</strong> $\Delta G = G_{real} - G_{ideal} = \int_0^T (P(t)-P_0)\cdot Q(t)\,dt$</p>
+  </div>
+
+  <div class="form-card">
+    <h3>⚙️ Datos de Gasto Familiar</h3>
+    <p class="hint">Ingresa precio y consumo por día. La cantidad de días debe ser par para Simpson 1/3 y múltiplo de 3 para Simpson 3/8.</p>
+    <div class="form-row">
+      <label>Precio base sin inflación (Bs./kg):
+        <input type="number" id="d-p0" value="8.00" step="0.01" />
+      </label>
+    </div>
+    <div id="d-points-container">
+      <div class="d-header-row"><span>Día</span><span>Precio (Bs./kg)</span><span>Consumo (kg/día)</span><span></span></div>
+    </div>
+    <div class="form-row">
+      <label>Número de días (mín 4):
+        <input type="number" id="d-ndays" value="9" min="4" max="30" />
+      </label>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-secondary" onclick="buildDTable()">Generar Tabla</button>
+      <button class="btn btn-primary" onclick="runScenarioD()">▶ Calcular Pérdida</button>
+      <button class="btn btn-ghost" onclick="loadExampleD()">Cargar Ejemplo La Paz</button>
+    </div>
+  </div>
+
+  <div class="results-area" id="d-results" style="display:none">
+    <div class="chart-wrap"><canvas id="chartD"></canvas></div>
+    <div class="table-wrap" id="d-table"></div>
+    <div class="interpretation-box" id="d-interpretation"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ESCENARIO E ═══════════════════ -->
+<section class="scenario" id="escenario-e">
+  <div class="scenario-header">
+    <div class="scenario-letter">E</div>
+    <div class="scenario-title-block">
+      <h2>Umbrales Críticos del Gasto Familiar</h2>
+      <p>Bisección · Newton-Raphson · Secante</p>
+    </div>
+  </div>
+
+  <div class="academic-block">
+    <h3>📚 Contexto y Fundamento Matemático</h3>
+    <p>
+      ¿En qué día el gasto acumulado supera el ingreso mensual familiar?
+      Modelamos el gasto acumulado como función del tiempo y buscamos la raíz
+      de $f(t) = G(t) - I = 0$.
+    </p>
+    <div class="math-block">
+      $$f(t) = G_0 e^{\alpha t} - I = 0$$
+    </div>
+    <p>donde $G_0$ es el gasto diario inicial, $\alpha$ la tasa de crecimiento del gasto (inflación diaria), $I$ el ingreso mensual familiar.</p>
+    <div class="math-block">
+      $$\textbf{Bisección:}\quad c = \frac{a+b}{2},\; \text{reducir intervalo según signo de } f(c)$$
+      $$\textbf{Newton-Raphson:}\quad t_{n+1} = t_n - \frac{f(t_n)}{f'(t_n)}$$
+      $$\textbf{Secante:}\quad t_{n+1} = t_n - f(t_n)\cdot\frac{t_n-t_{n-1}}{f(t_n)-f(t_{n-1})}$$
+    </div>
+    <div class="var-grid">
+      <div class="var-item"><strong>$G_0$</strong> — Gasto acumulado inicial (Bs.)</div>
+      <div class="var-item"><strong>$\alpha$</strong> — Tasa de inflación diaria</div>
+      <div class="var-item"><strong>$I$</strong> — Ingreso mensual familiar (Bs.)</div>
+      <div class="var-item"><strong>$t^*$</strong> — Día crítico (raíz de $f$)</div>
+    </div>
+    <p><strong>Interpretación social:</strong> $t^*$ representa el momento en que la familia entra en déficit. Un $t^*$ pequeño (pocos días) indica alta vulnerabilidad económica.</p>
+  </div>
+
+  <div class="form-card">
+    <h3>⚙️ Parámetros del Umbral</h3>
+    <div class="form-row">
+      <label>Ingreso mensual familiar (Bs.):
+        <input type="number" id="e-ingreso" value="3500" />
+      </label>
+      <label>Gasto diario inicial $G_0$ (Bs./día):
+        <input type="number" id="e-g0" value="80" step="0.01" />
+      </label>
+      <label>Tasa de inflación diaria α:
+        <input type="number" id="e-alpha" value="0.015" step="0.001" />
+      </label>
+      <label>Tolerancia:
+        <input type="number" id="e-tol" value="0.0001" step="0.00001" />
+      </label>
+      <label>Máx. iteraciones:
+        <input type="number" id="e-maxiter" value="100" />
+      </label>
+      <label>Intervalo bisección [a]:
+        <input type="number" id="e-a" value="1" />
+      </label>
+      <label>Intervalo bisección [b]:
+        <input type="number" id="e-b" value="60" />
+      </label>
+      <label>X₀ inicial (Newton-Raphson):
+        <input type="number" id="e-x0" value="30" />
+      </label>
+      <label>X₁ inicial (Secante):
+        <input type="number" id="e-x1" value="35" />
+      </label>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="runScenarioE()">▶ Encontrar Umbral</button>
+      <button class="btn btn-ghost" onclick="loadExampleE()">Cargar Ejemplo La Paz</button>
+    </div>
+  </div>
+
+  <div class="results-area" id="e-results" style="display:none">
+    <div class="results-tabs">
+      <button class="tab-btn active" onclick="showTab('e','bisec')">Bisección</button>
+      <button class="tab-btn" onclick="showTab('e','nr')">Newton-Raphson</button>
+      <button class="tab-btn" onclick="showTab('e','sec')">Secante</button>
+    </div>
+    <div id="e-tab-bisec" class="tab-content active"><div id="e-bisec-result"></div></div>
+    <div id="e-tab-nr"    class="tab-content">         <div id="e-nr-result"></div></div>
+    <div id="e-tab-sec"   class="tab-content">         <div id="e-sec-result"></div></div>
+    <div class="chart-wrap"><canvas id="chartE"></canvas></div>
+    <div class="interpretation-box" id="e-interpretation"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="brand-flag">🇧🇴</span>
+      <span>La Paz en Crisis · Métodos Numéricos</span>
+    </div>
+    <div class="footer-info">
+      <p>Proyecto Metodos Numericos · UMSA · Carrera de Informatica · 2026</p>
+      <p>Análisis puramente matemático y económico, sin contenido político.</p>
+    </div>
+    <div class="footer-methods">
+      Jacobi &nbsp;·&nbsp; Gauss-Seidel &nbsp;·&nbsp; SOR &nbsp;·&nbsp; LU &nbsp;·&nbsp;
+      Gradiente Conjugado &nbsp;·&nbsp; Euler &nbsp;·&nbsp; Heun &nbsp;·&nbsp; RK4 &nbsp;·&nbsp;
+      Lagrange &nbsp;·&nbsp; Newton &nbsp;·&nbsp; Splines &nbsp;·&nbsp;
+      Trapecio &nbsp;·&nbsp; Simpson 1/3 &nbsp;·&nbsp; Simpson 3/8 &nbsp;·&nbsp;
+      Bisección &nbsp;·&nbsp; Newton-Raphson &nbsp;·&nbsp; Secante
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
